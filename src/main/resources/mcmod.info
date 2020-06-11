@@ -1,0 +1,16 @@
+[
+{
+  "modid": "simplyhorses",
+  "name": "Simply Horses",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Ms. Random", "Mnesikos"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
