@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "simplyhorses:item/tack/jumping_saddle_greyscale",
+    "layer1": "simplyhorses:item/tack/jumping_saddle_overlay"
+  }
+}
