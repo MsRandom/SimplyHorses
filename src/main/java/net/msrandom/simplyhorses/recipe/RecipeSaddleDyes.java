@@ -1,6 +1,5 @@
 package net.msrandom.simplyhorses.recipe;
 
-import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.EnumDyeColor;
@@ -16,14 +15,13 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.msrandom.simplyhorses.item.SHItemSaddle;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 import java.util.Optional;
 
 public class RecipeSaddleDyes extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
     @Override
     public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World world) {
         ItemStack itemstack = ItemStack.EMPTY;
-        List<ItemStack> list = Lists.newArrayList();
+        boolean hasDye = false;
 
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack itemstack1 = inv.getStackInSlot(i);
@@ -36,15 +34,15 @@ public class RecipeSaddleDyes extends IForgeRegistryEntry.Impl<IRecipe> implemen
                     itemstack = itemstack1;
 
                 } else {
-                    if (!net.minecraftforge.oredict.DyeUtils.isDye(itemstack1))
+                    if (!DyeUtils.isDye(itemstack1))
                         return false;
 
-                    list.add(itemstack1);
+                    hasDye = true;
                 }
             }
         }
 
-        return !itemstack.isEmpty() && !list.isEmpty();
+        return !itemstack.isEmpty() && hasDye;
     }
 
     @Nonnull
@@ -77,7 +75,6 @@ public class RecipeSaddleDyes extends IForgeRegistryEntry.Impl<IRecipe> implemen
                     r = (int) ((float) r + f * 255.0F);
                     g = (int) ((float) g + f1 * 255.0F);
                     b = (int) ((float) b + f2 * 255.0F);
-                    ++j;
                 } else {
                     Optional<EnumDyeColor> color = DyeUtils.colorFromStack(itemstack1);
                     if (!color.isPresent()) return ItemStack.EMPTY;
@@ -90,8 +87,8 @@ public class RecipeSaddleDyes extends IForgeRegistryEntry.Impl<IRecipe> implemen
                     r += l1;
                     g += i2;
                     b += j2;
-                    ++j;
                 }
+                ++j;
             }
         }
 
