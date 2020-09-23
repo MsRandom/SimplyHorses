@@ -1,6 +1,4 @@
-package net.msrandom.simplyhorses.horse.genetics;
-
-import net.minecraft.util.IStringSerializable;
+package net.msrandom.simplyhorses.entity.genetics;
 
 public class HorseGenetics {
     public static final GeneticType<Agouti> AGOUTI = new GeneticType<>(Agouti.class);

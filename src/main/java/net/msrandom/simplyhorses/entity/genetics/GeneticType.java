@@ -1,6 +1,6 @@
-package net.msrandom.simplyhorses.horse.genetics;
+package net.msrandom.simplyhorses.entity.genetics;
 
-import net.msrandom.simplyhorses.horse.EntitySHorse;
+import net.msrandom.simplyhorses.entity.SHEntityHorse;
 
 public class GeneticType<T extends Enum<T> & AlleleCarrier> {
     private static int current;
@@ -8,12 +8,12 @@ public class GeneticType<T extends Enum<T> & AlleleCarrier> {
     public final int size;
     public final int pos;
 
-    public GeneticType(Class<T> cls) {
-        this.values = cls.getEnumConstants();
+    public GeneticType(Class<T> geneticClass) {
+        this.values = geneticClass.getEnumConstants();
         this.size = (Integer.toBinaryString(values.length).length() - 1) * 2;
         this.pos = current;
         current += size;
 
-        if ((current >> 5) > EntitySHorse.GENETICS.size() - 1) EntitySHorse.createKey();
+        if ((current >> 5) > SHEntityHorse.GENETICS.size() - 1) SHEntityHorse.createKey();
     }
 }

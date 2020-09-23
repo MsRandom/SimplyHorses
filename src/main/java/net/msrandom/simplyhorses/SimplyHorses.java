@@ -1,8 +1,10 @@
 package net.msrandom.simplyhorses;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -13,11 +15,14 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.msrandom.simplyhorses.horse.EntitySHorse;
-import net.msrandom.simplyhorses.horse.client.RenderSHorse;
-import net.msrandom.simplyhorses.init.ModItems;
-import net.msrandom.simplyhorses.item.ItemCustomSaddle;
+import net.msrandom.simplyhorses.entity.SHEntityHorse;
+import net.msrandom.simplyhorses.client.renderer.entity.RenderSHorse;
+import net.msrandom.simplyhorses.init.SHEntities;
+import net.msrandom.simplyhorses.init.SHItems;
+import net.msrandom.simplyhorses.item.SHItemSaddle;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Objects;
 
 @Mod(modid = SimplyHorses.MOD_ID, name = "Simply Horses", version = "1.0")
 public class SimplyHorses {
@@ -38,28 +43,28 @@ public class SimplyHorses {
     public static class Registry {
         @SubscribeEvent
         public static void registerEntity(RegistryEvent.Register<EntityEntry> event) {
-            event.getRegistry().register(EntityEntryBuilder.create().entity(EntitySHorse.class).id("horse", 0).name("shorse").tracker(32, 2, true).build());
+            SHEntities.REGISTERED.forEach(event.getRegistry()::register);
         }
 
         @SubscribeEvent
         public static void registerItems(RegistryEvent.Register<Item> event) {
-            ModItems.register(event.getRegistry());
+            SHItems.REGISTERED.forEach(event.getRegistry()::register);
         }
 
         @SideOnly(Side.CLIENT)
         @SubscribeEvent
         public static void registerClient(ModelRegistryEvent event) {
-            RenderingRegistry.registerEntityRenderingHandler(EntitySHorse.class, RenderSHorse::new);
-            ModItems.registerModels();
+            RenderingRegistry.registerEntityRenderingHandler(SHEntityHorse.class, RenderSHorse::new);
+            for (Item item : SHItems.REGISTERED) {
+                ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()), "inventory"));
+            }
         }
 
         @SideOnly(Side.CLIENT)
         @SubscribeEvent
         public static void registerItemColors(ColorHandlerEvent.Item event) {
-            event.getItemColors().registerItemColorHandler(
-                    (stack, tintIndex) -> tintIndex > 0 ? -1 : ((ItemCustomSaddle) stack.getItem()).getColor(stack),
-                    ModItems.ALL_AROUND_SADDLE, ModItems.DRESSAGE_SADDLE, ModItems.JUMPING_SADDLE, ModItems.WESTERN_SADDLE);
-
+            event.getItemColors().registerItemColorHandler((stack, tintIndex) -> tintIndex == 0 ? SHItemSaddle.getColor(stack) : -1,
+                    SHItems.ALL_AROUND_SADDLE, SHItems.DRESSAGE_SADDLE, SHItems.JUMPING_SADDLE, SHItems.WESTERN_SADDLE);
         }
     }
 }

@@ -1,5 +1,7 @@
 package net.msrandom.simplyhorses.item;
 
+import net.minecraft.block.BlockCauldron;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,50 +19,45 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.msrandom.simplyhorses.SimplyHorses;
 
-public class ItemCustomSaddle extends Item {
-    protected String name;
-
-    public ItemCustomSaddle(String name) {
-        this.name = name;
-        this.setTranslationKey(name);
-        this.setRegistryName(new ResourceLocation(SimplyHorses.MOD_ID, name));
+public class SHItemSaddle extends Item {
+    public SHItemSaddle() {
         setCreativeTab(CreativeTabs.TRANSPORTATION);
     }
 
-    public boolean hasColor(ItemStack stack) {
-        return stack.hasTagCompound() && stack.getTagCompound().hasKey("color");
+    public static boolean hasColor(ItemStack stack) {
+        return stack.hasTagCompound() && stack.getTagCompound().hasKey("Color");
     }
 
-    public int getColor(ItemStack stack) {
+    public static int getColor(ItemStack stack) {
         NBTTagCompound nbttagcompound = stack.getTagCompound();
 
         if (nbttagcompound != null) {
-            if (nbttagcompound.hasKey("color"))
-                return nbttagcompound.getInteger("color");
+            if (nbttagcompound.hasKey("Color"))
+                return nbttagcompound.getInteger("Color");
         }
 
         return 10511680;
     }
 
-    public void removeColor(ItemStack stack) { //todo use this by right clicking with item on water block/cauldron
+    public static void removeColor(ItemStack stack) {
         NBTTagCompound nbttagcompound = stack.getTagCompound();
 
         if (nbttagcompound != null) {
-            if (nbttagcompound.hasKey("color"))
-                nbttagcompound.removeTag("color");
+            if (nbttagcompound.hasKey("Color"))
+                nbttagcompound.removeTag("Color");
         }
     }
 
-    public void setColor(ItemStack stack, int color) {
+    public static void setColor(ItemStack stack, int color) {
         if (!stack.hasTagCompound())
             stack.setTagCompound(new NBTTagCompound());
 
-        stack.getTagCompound().setInteger("color", color);
+        stack.getTagCompound().setInteger("Color", color);
     }
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        /*ItemStack saddle = new ItemStack(this);
+        ItemStack saddle = new ItemStack(this);
         IBlockState iblockstate = worldIn.getBlockState(pos);
 
         if (iblockstate.getBlock() instanceof BlockCauldron && this.hasColor(saddle) && !worldIn.isRemote) {
@@ -72,13 +69,7 @@ public class ItemCustomSaddle extends Item {
                 cauldron.setWaterLevel(worldIn, pos, iblockstate, i - 1);
                 return EnumActionResult.SUCCESS;
             }
-        }*/
-        // todo, above code not recognizing colored saddles
+        }
         return EnumActionResult.PASS;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void registerItemModel() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(SimplyHorses.MOD_ID + ":" + name, "inventory"));
     }
 }

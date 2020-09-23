@@ -1,4 +1,4 @@
-package net.msrandom.simplyhorses.horse.genetics;
+package net.msrandom.simplyhorses.entity.genetics;
 
 public class GeneticData<T extends Enum<T> & AlleleCarrier> {
     private T left;
