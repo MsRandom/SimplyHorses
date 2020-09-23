@@ -69,17 +69,15 @@ public class RecipeSaddleDyes extends IForgeRegistryEntry.Impl<IRecipe> implemen
                     itemstack = itemstack1.copy();
                     itemstack.setCount(1);
 
-                    if (SHItemSaddle.hasColor(itemstack1)) {
-                        int l = SHItemSaddle.getColor(itemstack);
-                        float f = (l >> 16 & 255) / 255.0F;
-                        float f1 = (l >> 8 & 255) / 255.0F;
-                        float f2 = (l & 255) / 255.0F;
-                        i = (int) (i + Math.max(f, Math.max(f1, f2)) * 255.0F);
-                        r = (int) ((float) r + f * 255.0F);
-                        g = (int) ((float) g + f1 * 255.0F);
-                        b = (int) ((float) b + f2 * 255.0F);
-                        ++j;
-                    }
+                    int l = SHItemSaddle.getColor(itemstack);
+                    float f = (l >> 16 & 255) / 255.0F;
+                    float f1 = (l >> 8 & 255) / 255.0F;
+                    float f2 = (l & 255) / 255.0F;
+                    i = (int) (i + Math.max(f, Math.max(f1, f2)) * 255.0F);
+                    r = (int) ((float) r + f * 255.0F);
+                    g = (int) ((float) g + f1 * 255.0F);
+                    b = (int) ((float) b + f2 * 255.0F);
+                    ++j;
                 } else {
                     Optional<EnumDyeColor> color = DyeUtils.colorFromStack(itemstack1);
                     if (!color.isPresent()) return ItemStack.EMPTY;
