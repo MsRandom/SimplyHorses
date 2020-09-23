@@ -18,6 +18,7 @@ import net.msrandom.simplyhorses.entity.SHEntityHorse;
 import net.msrandom.simplyhorses.client.renderer.entity.SHRenderHorse;
 import net.msrandom.simplyhorses.init.SHEntities;
 import net.msrandom.simplyhorses.init.SHItems;
+import net.msrandom.simplyhorses.item.SHDyableItem;
 import net.msrandom.simplyhorses.item.SHItemSaddle;
 import org.apache.logging.log4j.Logger;
 
@@ -62,7 +63,7 @@ public class SimplyHorses {
         @SideOnly(Side.CLIENT)
         @SubscribeEvent
         public static void registerItemColors(ColorHandlerEvent.Item event) {
-            event.getItemColors().registerItemColorHandler((stack, tintIndex) -> tintIndex == 0 ? SHItemSaddle.getColor(stack) : -1,
+            event.getItemColors().registerItemColorHandler((stack, tintIndex) -> tintIndex == 0 ? SHDyableItem.getColor(stack) : -1,
                     SHItems.ALL_AROUND_SADDLE, SHItems.DRESSAGE_SADDLE, SHItems.JUMPING_SADDLE, SHItems.WESTERN_SADDLE);
         }
     }

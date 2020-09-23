@@ -13,36 +13,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class SHItemSaddle extends Item {
+public class SHItemSaddle extends Item implements SHDyableItem {
     public SHItemSaddle() {
         setCreativeTab(CreativeTabs.TRANSPORTATION);
-    }
-
-    public static int getColor(ItemStack stack) {
-        NBTTagCompound nbttagcompound = stack.getTagCompound();
-
-        if (nbttagcompound != null) {
-            if (nbttagcompound.hasKey("Color"))
-                return nbttagcompound.getInteger("Color");
-        }
-
-        return 0xA06540;
-    }
-
-    public static void removeColor(ItemStack stack) {
-        NBTTagCompound nbttagcompound = stack.getTagCompound();
-
-        if (nbttagcompound != null) {
-            if (nbttagcompound.hasKey("Color"))
-                nbttagcompound.removeTag("Color");
-        }
-    }
-
-    public static void setColor(ItemStack stack, int color) {
-        if (!stack.hasTagCompound())
-            stack.setTagCompound(new NBTTagCompound());
-
-        stack.getTagCompound().setInteger("Color", color);
     }
 
     @Override
@@ -55,7 +28,7 @@ public class SHItemSaddle extends Item {
             int i = iblockstate.getValue(BlockCauldron.LEVEL);
 
             if (i > 0) {
-                removeColor(saddle);
+                SHDyableItem.removeColor(saddle);
                 cauldron.setWaterLevel(worldIn, pos, iblockstate, i - 1);
                 return EnumActionResult.SUCCESS;
             }

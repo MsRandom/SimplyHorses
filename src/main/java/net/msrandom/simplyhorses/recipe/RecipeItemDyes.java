@@ -12,14 +12,15 @@ import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.oredict.DyeUtils;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import net.msrandom.simplyhorses.item.SHItemSaddle;
+import net.msrandom.simplyhorses.item.SHDyableItem;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class RecipeSaddleDyes extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
+public class RecipeItemDyes extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
     @Override
-    public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World world) {
+    public boolean matches(@Nonnull InventoryCrafting inv, @Nullable World world) {
         ItemStack itemstack = ItemStack.EMPTY;
         boolean hasDye = false;
 
@@ -27,7 +28,7 @@ public class RecipeSaddleDyes extends IForgeRegistryEntry.Impl<IRecipe> implemen
             ItemStack itemstack1 = inv.getStackInSlot(i);
 
             if (!itemstack1.isEmpty()) {
-                if (itemstack1.getItem() instanceof SHItemSaddle) {
+                if (itemstack1.getItem() instanceof SHDyableItem) {
                     if (!itemstack.isEmpty())
                         return false;
 
@@ -58,7 +59,7 @@ public class RecipeSaddleDyes extends IForgeRegistryEntry.Impl<IRecipe> implemen
             ItemStack itemstack1 = inventoryCrafting.getStackInSlot(k);
 
             if (!itemstack1.isEmpty()) {
-                if (itemstack1.getItem() instanceof SHItemSaddle) {
+                if (itemstack1.getItem() instanceof SHDyableItem) {
                     foundSaddle = true;
 
                     if (!itemstack.isEmpty())
@@ -67,7 +68,7 @@ public class RecipeSaddleDyes extends IForgeRegistryEntry.Impl<IRecipe> implemen
                     itemstack = itemstack1.copy();
                     itemstack.setCount(1);
 
-                    int l = SHItemSaddle.getColor(itemstack);
+                    int l = SHDyableItem.getColor(itemstack);
                     float f = (l >> 16 & 255) / 255.0F;
                     float f1 = (l >> 8 & 255) / 255.0F;
                     float f2 = (l & 255) / 255.0F;
@@ -104,7 +105,7 @@ public class RecipeSaddleDyes extends IForgeRegistryEntry.Impl<IRecipe> implemen
         k1 = (int) ((float) k1 * f3 / f4);
         int k2 = (i1 << 8) + j1;
         k2 = (k2 << 8) + k1;
-        SHItemSaddle.setColor(itemstack, k2);
+        SHDyableItem.setColor(itemstack, k2);
         return itemstack;
     }
 
@@ -141,7 +142,7 @@ public class RecipeSaddleDyes extends IForgeRegistryEntry.Impl<IRecipe> implemen
     public static class Factory implements IRecipeFactory {
         @Override
         public IRecipe parse(final JsonContext context, final JsonObject json) {
-            return new RecipeSaddleDyes();
+            return new RecipeItemDyes();
         }
     }
 }
