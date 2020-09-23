@@ -12,11 +12,10 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.msrandom.simplyhorses.entity.SHEntityHorse;
-import net.msrandom.simplyhorses.client.renderer.entity.RenderSHorse;
+import net.msrandom.simplyhorses.client.renderer.entity.SHRenderHorse;
 import net.msrandom.simplyhorses.init.SHEntities;
 import net.msrandom.simplyhorses.init.SHItems;
 import net.msrandom.simplyhorses.item.SHItemSaddle;
@@ -54,7 +53,7 @@ public class SimplyHorses {
         @SideOnly(Side.CLIENT)
         @SubscribeEvent
         public static void registerClient(ModelRegistryEvent event) {
-            RenderingRegistry.registerEntityRenderingHandler(SHEntityHorse.class, RenderSHorse::new);
+            RenderingRegistry.registerEntityRenderingHandler(SHEntityHorse.class, SHRenderHorse::new);
             for (Item item : SHItems.REGISTERED) {
                 ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()), "inventory"));
             }

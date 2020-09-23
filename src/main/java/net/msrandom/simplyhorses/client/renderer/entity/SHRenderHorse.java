@@ -13,7 +13,7 @@ import net.msrandom.simplyhorses.entity.SHEntityHorse;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RenderSHorse extends RenderLiving<SHEntityHorse> {
+public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
     private static final SHModelHorse[] MODELS = new SHModelHorse[] {
             new ModelHorseStandard(),
             new ModelHorseDraft(),
@@ -24,7 +24,7 @@ public class RenderSHorse extends RenderLiving<SHEntityHorse> {
     };
     private static final Map<String, ResourceLocation> CACHE = new HashMap<>();
 
-    public RenderSHorse(RenderManager manager)
+    public SHRenderHorse(RenderManager manager)
     {
         super(manager, new ModelHorse(), 0.75F);
     }
