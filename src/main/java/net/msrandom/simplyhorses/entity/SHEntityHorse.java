@@ -34,18 +34,18 @@ public class SHEntityHorse extends AbstractHorse {
     }
 
     private <E extends Enum<E> & Allele> void setGenotype(Gene<E> type, E left, E right) {
-        int index = type.pos / 32;
-        int relative = type.pos - (index * 32);
+        int index = type.getPos() / 32;
+        int relative = type.getPos() - (index * 32);
         DataParameter<Integer> parameter = GENETICS.get(index);
-        dataManager.set(parameter, (dataManager.get(parameter) & ~(((1 << type.size) - 1) << relative)) | (left.ordinal() << relative) | (right.ordinal() << (relative + (type.size >> 1))));
+        dataManager.set(parameter, (dataManager.get(parameter) & ~(((1 << type.getSize()) - 1) << relative)) | (left.ordinal() << relative) | (right.ordinal() << (relative + (type.getSize() >> 1))));
     }
 
     @SuppressWarnings("unchecked")
     private <E extends Enum<E> & Allele> Locus<E> getGenotype(Gene<E> type) {
         Locus<E> locus = (Locus<E>) geneticCache.computeIfAbsent(type, k -> new Locus<>());
-        int index = type.pos / 32;
-        int value = (dataManager.get(GENETICS.get(index)) >> (type.pos - (index * 32))) & ((1 << type.size) - 1);
-        int size = type.size >> 1;
+        int index = type.getPos() / 32;
+        int value = (dataManager.get(GENETICS.get(index)) >> (type.getPos() - (index * 32))) & ((1 << type.getSize()) - 1);
+        int size = type.getSize() >> 1;
         int most = (1 << size) - 1;
         return locus.setup(type.values[value & most], type.values[(value >> size) & most]);
     }
