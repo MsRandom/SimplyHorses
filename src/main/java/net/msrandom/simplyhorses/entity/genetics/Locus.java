@@ -1,8 +1,9 @@
 package net.msrandom.simplyhorses.entity.genetics;
 
-public class GeneticData<T extends Enum<T> & AlleleCarrier> {
+public class Locus<T extends Enum<T> & Allele> {
     private T left;
     private T right;
+    private T dominant;
 
     public T getLeft() {
         return left;
@@ -12,9 +13,14 @@ public class GeneticData<T extends Enum<T> & AlleleCarrier> {
         return right;
     }
 
-    public GeneticData<T> setup(T left, T right) {
+    public T getDominant() {
+        return dominant;
+    }
+
+    public Locus<T> setup(T left, T right) {
         this.left = left;
         this.right = right;
+        dominant = left.ordinal() < right.ordinal() ? left : right;
         return this;
     }
 

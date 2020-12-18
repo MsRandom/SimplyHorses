@@ -8,9 +8,9 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.msrandom.simplyhorses.entity.genetics.AlleleCarrier;
-import net.msrandom.simplyhorses.entity.genetics.GeneticData;
-import net.msrandom.simplyhorses.entity.genetics.GeneticType;
+import net.msrandom.simplyhorses.entity.genetics.Allele;
+import net.msrandom.simplyhorses.entity.genetics.Locus;
+import net.msrandom.simplyhorses.entity.genetics.Gene;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class SHEntityHorse extends AbstractHorse {
     public static final List<DataParameter<Integer>> GENETICS = new ArrayList<>();
-    private final Map<GeneticType<?>, GeneticData<?>> geneticCache = new HashMap<>();
+    private final Map<Gene<?>, Locus<?>> geneticCache = new HashMap<>();
 
     public SHEntityHorse(World worldIn) {
         super(worldIn);
@@ -33,21 +33,21 @@ public class SHEntityHorse extends AbstractHorse {
         }
     }
 
-    private <E extends Enum<E> & AlleleCarrier> void setData(GeneticType<E> type, E left, E right) {
-        int index = type.pos >> 5;
-        int relative = type.pos - (index << 5);
+    private <E extends Enum<E> & Allele> void setGenotype(Gene<E> type, E left, E right) {
+        int index = type.pos / 32;
+        int relative = type.pos - (index * 32);
         DataParameter<Integer> parameter = GENETICS.get(index);
         dataManager.set(parameter, (dataManager.get(parameter) & ~(((1 << type.size) - 1) << relative)) | (left.ordinal() << relative) | (right.ordinal() << (relative + (type.size >> 1))));
     }
 
     @SuppressWarnings("unchecked")
-    private <E extends Enum<E> & AlleleCarrier> GeneticData<E> getData(GeneticType<E> type) {
-        GeneticData<E> data = (GeneticData<E>) geneticCache.computeIfAbsent(type, k -> new GeneticData<>());
-        int index = type.pos >> 5;
-        int value = (dataManager.get(GENETICS.get(index)) >> (type.pos - (index << 5))) & ((1 << type.size) - 1);
+    private <E extends Enum<E> & Allele> Locus<E> getGenotype(Gene<E> type) {
+        Locus<E> locus = (Locus<E>) geneticCache.computeIfAbsent(type, k -> new Locus<>());
+        int index = type.pos / 32;
+        int value = (dataManager.get(GENETICS.get(index)) >> (type.pos - (index * 32))) & ((1 << type.size) - 1);
         int size = type.size >> 1;
         int most = (1 << size) - 1;
-        return data.setup(type.values[value & most], type.values[(value >> size) & most]);
+        return locus.setup(type.values[value & most], type.values[(value >> size) & most]);
     }
 
     @Override
