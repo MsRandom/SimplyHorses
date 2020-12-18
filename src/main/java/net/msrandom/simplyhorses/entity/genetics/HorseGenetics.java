@@ -1,7 +1,8 @@
 package net.msrandom.simplyhorses.entity.genetics;
 
 public class HorseGenetics {
-    public static final Gene<Agouti> AGOUTI = Gene.register(new Gene<>(Agouti.class));
+    private static final GeneticsRegistry REGISTRY = new GeneticsRegistry();
+    public static final GeneticsRegistry.Gene<Agouti> AGOUTI = REGISTRY.register(new GeneticsRegistry.Gene<>(Agouti.class));
 
     public enum Agouti implements Allele {
         ;

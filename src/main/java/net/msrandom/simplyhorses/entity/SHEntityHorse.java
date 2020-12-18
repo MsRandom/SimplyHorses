@@ -9,8 +9,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.msrandom.simplyhorses.entity.genetics.Allele;
+import net.msrandom.simplyhorses.entity.genetics.GeneticsRegistry;
 import net.msrandom.simplyhorses.entity.genetics.Locus;
-import net.msrandom.simplyhorses.entity.genetics.Gene;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class SHEntityHorse extends AbstractHorse {
     public static final List<DataParameter<Integer>> GENETICS = new ArrayList<>();
-    private final Map<Gene<?>, Locus<?>> geneticCache = new HashMap<>();
+    private final Map<GeneticsRegistry.Gene<?>, Locus<?>> geneticCache = new HashMap<>();
 
     public SHEntityHorse(World worldIn) {
         super(worldIn);
@@ -33,7 +33,7 @@ public class SHEntityHorse extends AbstractHorse {
         }
     }
 
-    private <E extends Enum<E> & Allele> void setGenotype(Gene<E> type, E left, E right) {
+    private <E extends Enum<E> & Allele> void setGenotype(GeneticsRegistry.Gene<E> type, E left, E right) {
         int index = type.getPos() / 32;
         int relative = type.getPos() - (index * 32);
         DataParameter<Integer> parameter = GENETICS.get(index);
@@ -41,7 +41,7 @@ public class SHEntityHorse extends AbstractHorse {
     }
 
     @SuppressWarnings("unchecked")
-    private <E extends Enum<E> & Allele> Locus<E> getGenotype(Gene<E> type) {
+    private <E extends Enum<E> & Allele> Locus<E> getGenotype(GeneticsRegistry.Gene<E> type) {
         Locus<E> locus = (Locus<E>) geneticCache.computeIfAbsent(type, k -> new Locus<>());
         int index = type.getPos() / 32;
         int value = (dataManager.get(GENETICS.get(index)) >> (type.getPos() - (index * 32))) & ((1 << type.getSize()) - 1);
