@@ -32,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    compile(group: 'net.msrandom.genetics', name: 'IntegerGenetics', version: '1.0.0')
+    compile(group: 'net.msrandom.genetics', name: 'IntegerGenetics', version: '1.0.1')
 }
 
 processResources {
