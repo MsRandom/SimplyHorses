@@ -24,6 +24,17 @@ minecraft {
     mappings = "snapshot_20180814"
 }
 
+repositories {
+    maven {
+        name = "Ashley's repo"
+        url = "https://msrandom.net/artifactory/libs-release-local/"
+    }
+}
+
+dependencies {
+    compile(group: 'net.msrandom.genetics', name: 'IntegerGenetics', version: '1.0.0')
+}
+
 processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version

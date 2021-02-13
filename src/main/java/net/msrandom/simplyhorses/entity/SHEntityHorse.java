@@ -8,18 +8,17 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.msrandom.simplyhorses.entity.genetics.Allele;
-import net.msrandom.simplyhorses.entity.genetics.GeneticsRegistry;
-import net.msrandom.simplyhorses.entity.genetics.Locus;
+import net.msrandom.genetics.GenotypeHandler;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SHEntityHorse extends AbstractHorse {
     public static final List<DataParameter<Integer>> GENETICS = new ArrayList<>();
-    private final Map<GeneticsRegistry.Gene<?>, Locus<?>> geneticCache = new HashMap<>();
+    private final GenotypeHandler genotypeHandler = new GenotypeHandler(
+            index -> dataManager.get(GENETICS.get(index)),
+            (index, value) -> dataManager.set(GENETICS.get(index), value)
+    );
 
     public SHEntityHorse(World worldIn) {
         super(worldIn);
@@ -31,23 +30,6 @@ public class SHEntityHorse extends AbstractHorse {
         for (DataParameter<Integer> genetic : GENETICS) {
             dataManager.register(genetic, 0);
         }
-    }
-
-    private <E extends Enum<E> & Allele> void setGenotype(GeneticsRegistry.Gene<E> type, E left, E right) {
-        int index = type.getPos() / 32;
-        int relative = type.getPos() - (index * 32);
-        DataParameter<Integer> parameter = GENETICS.get(index);
-        dataManager.set(parameter, (dataManager.get(parameter) & ~(((1 << type.getSize()) - 1) << relative)) | (left.ordinal() << relative) | (right.ordinal() << (relative + (type.getSize() >> 1))));
-    }
-
-    @SuppressWarnings("unchecked")
-    private <E extends Enum<E> & Allele> Locus<E> getGenotype(GeneticsRegistry.Gene<E> type) {
-        Locus<E> locus = (Locus<E>) geneticCache.computeIfAbsent(type, k -> new Locus<>());
-        int index = type.getPos() / 32;
-        int value = (dataManager.get(GENETICS.get(index)) >> (type.getPos() - (index * 32))) & ((1 << type.getSize()) - 1);
-        int size = type.getSize() >> 1;
-        int most = (1 << size) - 1;
-        return locus.setup(type.values[value & most], type.values[(value >> size) & most]);
     }
 
     @Override
