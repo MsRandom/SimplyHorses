@@ -42,7 +42,7 @@ public class SimplyHorses {
     @Mod.EventBusSubscriber
     public static class Registry {
         @SubscribeEvent
-        public static void registerEntity(RegistryEvent.Register<EntityEntry> event) {
+        public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {
             SHEntities.REGISTERED.forEach(event.getRegistry()::register);
         }
 

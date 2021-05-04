@@ -1,5 +1,5 @@
 {
   "recipes": {
-    "dyables": "net.msrandom.simplyhorses.item.crafting.RecipeDyeables$Factory"
+    "dyables": "net.msrandom.simplyhorses.recipe.RecipeItemDyes$Factory"
   }
 }

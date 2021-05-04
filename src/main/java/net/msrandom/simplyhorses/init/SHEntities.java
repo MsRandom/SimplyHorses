@@ -22,7 +22,7 @@ public class SHEntities {
 
     private static <T extends AbstractHorse> EntityEntry register(String name, Class<T> entityClass, Function<World, T> factory, int eggPrimary, int eggSecondary) {
         EntityEntryBuilder<T> builder = EntityEntryBuilder.create();
-        return builder
+        EntityEntry entry = builder
                 .entity(entityClass)
                 .factory(factory)
                 .name(SimplyHorses.MOD_ID + "." + name)
@@ -30,5 +30,7 @@ public class SHEntities {
                 .id(name, id++)
                 .egg(eggPrimary, eggSecondary)
                 .build();
+        REGISTERED.add(entry);
+        return entry;
     }
 }
