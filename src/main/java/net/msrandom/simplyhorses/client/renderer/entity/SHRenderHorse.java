@@ -76,7 +76,7 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
         final GenotypeHandler genotypeHandler = entity.getGenotypeHandler();
         StringBuilder builder = new StringBuilder();
         builder.append("textures/entity/").append(entity.isChild() ? "foal/" : "adult/").append(entity.getTypeName()).append("/");
-        if (genotypeHandler.get(GREY).getDominant() == HorseGenetics.Gray.GRAY) {
+        if (genotypeHandler.get(GRAY).getDominant() == HorseGenetics.Gray.GRAY) {
             builder.append("grey.png");
         } else if (genotypeHandler.get(EXTENSION).getDominant() == HorseGenetics.Extension.BLACK) {
             builder.append("black.png");
