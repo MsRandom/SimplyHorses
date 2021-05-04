@@ -34,11 +34,10 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
             new ModelHorseStandard()
     };
     //Genetic hash -> pair of base texture and markings
-    private static final Int2ObjectMap<Tuple<ResourceLocation, ResourceLocation>> CACHE = new Int2ObjectOpenHashMap<>();
+    private static final Int2ObjectMap<ResourceLocation> CACHE = new Int2ObjectOpenHashMap<>();
 
     public SHRenderHorse(RenderManager manager) {
         super(manager, new ModelHorse(), 0.75F);
-        addLayer(new SHMarkingsLayer(this));
     }
 
     @Override
@@ -48,10 +47,6 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
     }
 
     protected ResourceLocation getEntityTexture(SHEntityHorse entity) {
-        return getTextures(entity).getFirst();
-    }
-
-    public Tuple<ResourceLocation, ResourceLocation> getTextures(SHEntityHorse entity) {
         //Generate a unique hash value for the horse's genetics
         int hash = 1;
         for (DataParameter<Integer> genetic : SHEntityHorse.GENETICS) {
@@ -59,16 +54,14 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
         }
 
         //Get the textures from the cache based on the unique hash
-        Tuple<ResourceLocation, ResourceLocation> textures = CACHE.get(hash);
-        if (textures == null) {
+        ResourceLocation texture = CACHE.get(hash);
+        if (texture == null) {
             //This will pretty much be a random name for the markings texture, but it doesn't matter as it's generated
-            ResourceLocation markingsTexture = new ResourceLocation(SimplyHorses.MOD_ID, hash + ".png");
-            //TODO Maybe make sure that each unique marking has a texture *without* considering the base?
-            Minecraft.getMinecraft().getTextureManager().loadTexture(markingsTexture, new SHMarkingTexture(generateMarkings(entity)));
-            textures = new Tuple<>(new ResourceLocation(SimplyHorses.MOD_ID, "textures/entity/" + getBaseTexture(entity) + ".png"), markingsTexture);
-            CACHE.put(hash, textures);
+            texture = new ResourceLocation(SimplyHorses.MOD_ID, hash + ".png");
+            Minecraft.getMinecraft().getTextureManager().loadTexture(texture, new SHMarkingTexture(new ResourceLocation(SimplyHorses.MOD_ID, "textures/entity/" + getBaseTexture(entity) + ".png"), generateMarkings(entity)));
+            CACHE.put(hash, texture);
         }
-        return textures;
+        return texture;
     }
 
     //TODO NOT DONE

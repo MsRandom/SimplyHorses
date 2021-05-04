@@ -12,30 +12,27 @@ import java.io.IOException;
 import java.util.Set;
 
 public class SHMarkingTexture extends AbstractTexture {
+    private final ResourceLocation base;
     public final Set<ResourceLocation> textures;
 
-    public SHMarkingTexture(Set<ResourceLocation> textures) {
+    public SHMarkingTexture(ResourceLocation base, Set<ResourceLocation> textures) {
+        this.base = base;
         this.textures = textures;
     }
 
     public void loadTexture(IResourceManager resourceManager) throws IOException {
         this.deleteGlTexture();
-        BufferedImage image = null;
+
+        IResource baseResource = resourceManager.getResource(base);
+        BufferedImage baseImage = TextureUtil.readBufferedImage(baseResource.getInputStream());
+        IOUtils.closeQuietly(baseResource);
 
         for (ResourceLocation texture : this.textures) {
-            IResource resource = resourceManager.getResource(texture);
-            BufferedImage layer = TextureUtil.readBufferedImage(resource.getInputStream());
-
-            if (image == null) {
-                image = new BufferedImage(layer.getWidth(), layer.getHeight(), 2);
-            }
-
-            image.getGraphics().drawImage(layer, 0, 0, null);
-            IOUtils.closeQuietly(resource);
+            IResource layerResource = resourceManager.getResource(texture);
+            baseImage.getGraphics().drawImage(TextureUtil.readBufferedImage(layerResource.getInputStream()), 0, 0, null);
+            IOUtils.closeQuietly(layerResource);
         }
 
-        if (image != null) {
-            TextureUtil.uploadTextureImage(this.getGlTextureId(), image);
-        }
+        TextureUtil.uploadTextureImage(this.getGlTextureId(), baseImage);
     }
 }
