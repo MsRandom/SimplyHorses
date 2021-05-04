@@ -65,7 +65,7 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
             ResourceLocation markingsTexture = new ResourceLocation(SimplyHorses.MOD_ID, hash + ".png");
             //TODO Maybe make sure that each unique marking has a texture *without* considering the base?
             Minecraft.getMinecraft().getTextureManager().loadTexture(markingsTexture, new SHMarkingTexture(generateMarkings(entity)));
-            textures = new Tuple<>(new ResourceLocation(SimplyHorses.MOD_ID, getBaseTexture(entity)), markingsTexture);
+            textures = new Tuple<>(new ResourceLocation(SimplyHorses.MOD_ID, "textures/entity/" + getBaseTexture(entity) + ".png"), markingsTexture);
             CACHE.put(hash, textures);
         }
         return textures;
@@ -75,19 +75,19 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
     private String getBaseTexture(SHEntityHorse entity) {
         final GenotypeHandler genotypeHandler = entity.getGenotypeHandler();
         StringBuilder builder = new StringBuilder();
-        builder.append("textures/entity/").append(entity.isChild() ? "foal/" : "adult/").append(entity.getTypeName()).append("/");
+        builder.append(entity.isChild() ? "foal/" : "adult/").append(entity.getTypeName()).append("/");
         if (genotypeHandler.get(GRAY).getDominant() == HorseGenetics.Gray.GRAY) {
-            builder.append("grey.png");
+            builder.append("grey");
         } else if (genotypeHandler.get(EXTENSION).getDominant() == HorseGenetics.Extension.BLACK) {
-            builder.append("black.png");
+            builder.append("black");
         } else {
             Locus<HorseGenetics.Cream> creamDilution = genotypeHandler.get(CREAM);
             if (creamDilution.getLeft() == HorseGenetics.Cream.CREAM && creamDilution.getRight() == HorseGenetics.Cream.CREAM) {
-                builder.append("cremello.png");
+                builder.append("cremello");
             } else if (creamDilution.has(HorseGenetics.Cream.CREAM)) {
-                builder.append("palomino.png");
+                builder.append("palomino");
             } else {
-                builder.append("chestnut.png");
+                builder.append("chestnut");
             }
         }
 

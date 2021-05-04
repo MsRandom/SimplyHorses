@@ -4,19 +4,23 @@ buildscript {
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12.2-1.00"
+plugins {
+    id "com.github.johnrengelman.shadow" version "4.0.4"
+}
+
+apply plugin: "net.minecraftforge.gradle.forge"
+
+version = "1.12.2-1.0"
 group = "net.msrandom.simplyhorses"
 archivesBaseName = "SimplyHorses"
 
-sourceCompatibility = targetCompatibility = '1.8'
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
+
+def intGeneticsVersions = "1.0.6-3"
 
 minecraft {
     version = "1.12.2-14.23.5.2847"
@@ -32,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    compile(group: 'net.msrandom.genetics', name: 'IntegerGenetics', version: '1.0.6-2')
+    compile(group: "net.msrandom.genetics", name: "IntegerGenetics", version: intGeneticsVersions)
 }
 
 processResources {
@@ -40,11 +44,30 @@ processResources {
     inputs.property "mcversion", project.minecraft.version
 
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version': project.version, 'mcversion': project.minecraft.version
+        include "mcmod.info"
+        expand "version": project.version, "mcversion": project.minecraft.version
     }
 
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+        exclude "mcmod.info"
     }
 }
+
+shadowJar {
+    dependencies {
+        include(dependency(group: "net.msrandom.genetics", name: "IntegerGenetics", version: intGeneticsVersions))
+    }
+}
+
+artifacts {
+    archives shadowJar
+}
+
+reobf {
+    shadowJar {
+        mappingType = "SEARGE"
+    }
+}
+
+tasks.reobfShadowJar.mustRunAfter shadowJar
+tasks.build.dependsOn shadowJar
