@@ -9,13 +9,13 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
 import net.msrandom.genetics.GenotypeHandler;
 import net.msrandom.genetics.Locus;
 import net.msrandom.simplyhorses.SimplyHorses;
 import net.msrandom.simplyhorses.client.model.ModelHorseDraft;
 import net.msrandom.simplyhorses.client.model.ModelHorseStandard;
 import net.msrandom.simplyhorses.client.model.SHModelHorse;
+import net.msrandom.simplyhorses.client.renderer.texture.SHMarkingTexture;
 import net.msrandom.simplyhorses.entity.HorseGenetics;
 import net.msrandom.simplyhorses.entity.SHEntityHorse;
 
@@ -70,9 +70,13 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
         StringBuilder builder = new StringBuilder();
         builder.append(entity.isChild() ? "foal/" : "adult/").append(entity.getTypeName()).append("/");
         if (genotypeHandler.get(GRAY).getDominant() == HorseGenetics.Gray.GRAY) {
-            builder.append("grey");
+            builder.append("gray");
         } else if (genotypeHandler.get(EXTENSION).getDominant() == HorseGenetics.Extension.BLACK) {
-            builder.append("black");
+            if (genotypeHandler.get(AGOUTI).getDominant() == HorseGenetics.Agouti.AGOUTI) {
+                builder.append("bay");
+            } else {
+                builder.append("black");
+            }
         } else {
             Locus<HorseGenetics.Cream> creamDilution = genotypeHandler.get(CREAM);
             if (creamDilution.getLeft() == HorseGenetics.Cream.CREAM && creamDilution.getRight() == HorseGenetics.Cream.CREAM) {

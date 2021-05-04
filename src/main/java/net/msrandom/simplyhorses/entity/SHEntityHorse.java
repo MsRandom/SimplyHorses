@@ -21,7 +21,7 @@ public class SHEntityHorse extends AbstractHorse {
     private static final GeneticsRegistry REGISTRY = new GeneticsRegistry(GENETICS::size, () -> GENETICS.add(EntityDataManager.createKey(SHEntityHorse.class, DataSerializers.VARINT)));
     public static final Gene<Extension> EXTENSION = REGISTRY.register(Extension.class);
     public static final Gene<Agouti> AGOUTI = REGISTRY.register(Agouti.class);
-    public static final Gene<Dun> DUNE = REGISTRY.register(Dun.class);
+    public static final Gene<Dun> DUN = REGISTRY.register(Dun.class);
     public static final Gene<Cream> CREAM = REGISTRY.register(Cream.class);
     public static final Gene<Champagne> CHAMPAGNE = REGISTRY.register(Champagne.class);
     public static final Gene<Silver> SILVER = REGISTRY.register(Silver.class);
@@ -36,8 +36,8 @@ public class SHEntityHorse extends AbstractHorse {
             (index, value) -> dataManager.set(GENETICS.get(index), value)
     );
 
-    public SHEntityHorse(World worldIn) {
-        super(worldIn);
+    public SHEntityHorse(World world) {
+        super(world);
     }
 
     @Override

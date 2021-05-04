@@ -1,4 +1,4 @@
-package net.msrandom.simplyhorses.client.renderer.entity;
+package net.msrandom.simplyhorses.client.renderer.texture;
 
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -13,11 +13,11 @@ import java.util.Set;
 
 public class SHMarkingTexture extends AbstractTexture {
     private final ResourceLocation base;
-    public final Set<ResourceLocation> textures;
+    public final Set<ResourceLocation> markings;
 
-    public SHMarkingTexture(ResourceLocation base, Set<ResourceLocation> textures) {
+    public SHMarkingTexture(ResourceLocation base, Set<ResourceLocation> markings) {
         this.base = base;
-        this.textures = textures;
+        this.markings = markings;
     }
 
     public void loadTexture(IResourceManager resourceManager) throws IOException {
@@ -27,7 +27,7 @@ public class SHMarkingTexture extends AbstractTexture {
         BufferedImage baseImage = TextureUtil.readBufferedImage(baseResource.getInputStream());
         IOUtils.closeQuietly(baseResource);
 
-        for (ResourceLocation texture : this.textures) {
+        for (ResourceLocation texture : this.markings) {
             IResource layerResource = resourceManager.getResource(texture);
             baseImage.getGraphics().drawImage(TextureUtil.readBufferedImage(layerResource.getInputStream()), 0, 0, null);
             IOUtils.closeQuietly(layerResource);
