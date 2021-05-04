@@ -19,17 +19,17 @@ public class SHEntityHorse extends AbstractHorse {
 
     //These are here since we want GENETICS to be populated before the entity is created.
     private static final GeneticsRegistry REGISTRY = new GeneticsRegistry(GENETICS::size, () -> GENETICS.add(EntityDataManager.createKey(SHEntityHorse.class, DataSerializers.VARINT)));
-    public static final Gene<Extension> EXTENSION = REGISTRY.register(new Gene<>(Extension.class));
-    public static final Gene<Agouti> AGOUTI = REGISTRY.register(new Gene<>(Agouti.class));
-    public static final Gene<Dun> DUNE = REGISTRY.register(new Gene<>(Dun.class));
-    public static final Gene<Cream> CREAM = REGISTRY.register(new Gene<>(Cream.class));
-    public static final Gene<Champagne> CHAMPAGNE = REGISTRY.register(new Gene<>(Champagne.class));
-    public static final Gene<Silver> SILVER = REGISTRY.register(new Gene<>(Silver.class));
-    public static final Gene<Mushroom> MUSHROOM = REGISTRY.register(new Gene<>(Mushroom.class));
-    public static final Gene<Gray> GRAY = REGISTRY.register(new Gene<>(Gray.class));
-    public static final Gene<Tobiano> TOBIANO = REGISTRY.register(new Gene<>(Tobiano.class));
-    public static final Gene<LeopardComplex> LEOPARD_COMPLEX = REGISTRY.register(new Gene<>(LeopardComplex.class));
-    public static final Gene<FrameOvero> FRAME_OVERO = REGISTRY.register(new Gene<>(FrameOvero.class));
+    public static final Gene<Extension> EXTENSION = REGISTRY.register(Extension.class);
+    public static final Gene<Agouti> AGOUTI = REGISTRY.register(Agouti.class);
+    public static final Gene<Dun> DUNE = REGISTRY.register(Dun.class);
+    public static final Gene<Cream> CREAM = REGISTRY.register(Cream.class);
+    public static final Gene<Champagne> CHAMPAGNE = REGISTRY.register(Champagne.class);
+    public static final Gene<Silver> SILVER = REGISTRY.register(Silver.class);
+    public static final Gene<Mushroom> MUSHROOM = REGISTRY.register(Mushroom.class);
+    public static final Gene<Gray> GRAY = REGISTRY.register(Gray.class);
+    public static final Gene<Tobiano> TOBIANO = REGISTRY.register(Tobiano.class);
+    public static final Gene<LeopardComplex> LEOPARD_COMPLEX = REGISTRY.register(LeopardComplex.class);
+    public static final Gene<FrameOvero> FRAME_OVERO = REGISTRY.register(FrameOvero.class);
 
     private final GenotypeHandler genotypeHandler = new GenotypeHandler(
             index -> dataManager.get(GENETICS.get(index)),

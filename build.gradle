@@ -20,7 +20,7 @@ archivesBaseName = "SimplyHorses"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
 
-def intGeneticsVersions = "1.0.6-3"
+def intGeneticsVersions = "1.0.7-6"
 
 minecraft {
     version = "1.12.2-14.23.5.2847"
