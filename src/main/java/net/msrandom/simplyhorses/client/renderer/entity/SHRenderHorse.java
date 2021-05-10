@@ -59,8 +59,7 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
         //Get the textures from the cache based on the unique hash *and hope there is no conflicts*
         ResourceLocation texture = CACHE.get(hash);
         if (texture == null) {
-            //This will pretty much be a random name for the markings texture, but it doesn't matter as it's generated
-            texture = new ResourceLocation(SimplyHorses.MOD_ID, hash + ".png");
+            texture = new ResourceLocation(SimplyHorses.MOD_ID, "textures/entity/generated/horse_" + hash + ".png");
             Minecraft.getMinecraft().getTextureManager().loadTexture(texture, new SHMarkingTexture(new ResourceLocation(SimplyHorses.MOD_ID, "textures/entity/" + getBaseTexture(entity) + ".png"), generateMarkings(entity)));
             CACHE.put(hash, texture);
         }
