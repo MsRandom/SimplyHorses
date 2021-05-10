@@ -47,13 +47,16 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
     }
 
     protected ResourceLocation getEntityTexture(SHEntityHorse entity) {
-        //Generate a unique hash value for the horse's genetics
-        int hash = 1;
+        //Generate a unique hash value for the horse's genetics and type
+        int hash = 1 << entity.getVariant() + 1;
+        if (entity.isChild()) {
+            hash |= 0x1;
+        }
         for (DataParameter<Integer> genetic : SHEntityHorse.GENETICS) {
             hash = 31 * hash + entity.getDataManager().get(genetic);
         }
 
-        //Get the textures from the cache based on the unique hash
+        //Get the textures from the cache based on the unique hash *and hope there is no conflicts*
         ResourceLocation texture = CACHE.get(hash);
         if (texture == null) {
             //This will pretty much be a random name for the markings texture, but it doesn't matter as it's generated
