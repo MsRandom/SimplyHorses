@@ -16,10 +16,11 @@ import net.msrandom.simplyhorses.client.model.ModelHorseDraft;
 import net.msrandom.simplyhorses.client.model.ModelHorseStandard;
 import net.msrandom.simplyhorses.client.model.SHModelHorse;
 import net.msrandom.simplyhorses.client.renderer.texture.SHMarkingTexture;
-import net.msrandom.simplyhorses.entity.HorseGenetics;
+import net.msrandom.simplyhorses.entity.genetics.HorseGenetics.*;
 import net.msrandom.simplyhorses.entity.SHEntityHorse;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import static net.msrandom.simplyhorses.entity.SHEntityHorse.*;
@@ -48,10 +49,13 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
 
     protected ResourceLocation getEntityTexture(SHEntityHorse entity) {
         //Generate a unique hash value for the horse's genetics and type
-        int hash = 1 << entity.getVariant() + 1;
+        int hash = 1 << entity.getVariant() + 8;
         if (entity.isChild()) {
-            hash |= 0x1;
+            hash |= 0x1; // First bit is for foal vs adult
         }
+        hash |= entity.getBay().ordinal() << 1; // We use the 2 bits after to make sure all bay values are unique
+        hash |= entity.getPalomino().ordinal() << 3; // Same thing for the 2 bits after with palomino
+        hash |= entity.getChestnut().ordinal() << 5; // And 3 extra bits for chestnut
         for (DataParameter<Integer> genetic : SHEntityHorse.GENETICS) {
             hash = 31 * hash + entity.getDataManager().get(genetic);
         }
@@ -62,6 +66,9 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
             texture = new ResourceLocation(SimplyHorses.MOD_ID, "textures/entity/generated/horse_" + hash + ".png");
             Minecraft.getMinecraft().getTextureManager().loadTexture(texture, new SHMarkingTexture(new ResourceLocation(SimplyHorses.MOD_ID, "textures/entity/" + getBaseTexture(entity) + ".png"), generateMarkings(entity)));
             CACHE.put(hash, texture);
+        } else {
+            Minecraft.getMinecraft().getTextureManager().deleteTexture(texture);
+            Minecraft.getMinecraft().getTextureManager().loadTexture(texture, new SHMarkingTexture(new ResourceLocation(SimplyHorses.MOD_ID, "textures/entity/" + getBaseTexture(entity) + ".png"), generateMarkings(entity)));
         }
         return texture;
     }
@@ -71,30 +78,52 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
         final GenotypeHandler genotypeHandler = entity.getGenotypeHandler();
         StringBuilder builder = new StringBuilder();
         builder.append(entity.isChild() ? "foal/" : "adult/").append(entity.getTypeName()).append("/");
-        if (genotypeHandler.get(GRAY).getDominant() == HorseGenetics.Gray.GRAY) {
+        if (genotypeHandler.get(GRAY).getDominant() == Gray.GRAY) {
             builder.append("gray");
-        } else if (genotypeHandler.get(EXTENSION).getDominant() == HorseGenetics.Extension.BLACK) {
-            if (genotypeHandler.get(AGOUTI).getDominant() == HorseGenetics.Agouti.AGOUTI) {
-                builder.append("bay");
+        } else if (genotypeHandler.get(EXTENSION).getDominant() == Extension.BLACK) {
+            if (genotypeHandler.get(AGOUTI).getDominant() == Agouti.AGOUTI) {
+                final Locus<Cream> cream = genotypeHandler.get(CREAM);
+                if (cream.getLeft() == Cream.CREAM && cream.getRight() == Cream.CREAM) {
+                    builder.append("perlino");
+                } else {
+                    builder.append("bay/").append(entity.getBay().name().toLowerCase(Locale.ROOT));
+                }
             } else {
                 builder.append("black");
             }
         } else {
-            Locus<HorseGenetics.Cream> creamDilution = genotypeHandler.get(CREAM);
-            if (creamDilution.getLeft() == HorseGenetics.Cream.CREAM && creamDilution.getRight() == HorseGenetics.Cream.CREAM) {
+            final Locus<Cream> creamDilution = genotypeHandler.get(CREAM);
+            if (creamDilution.getLeft() == Cream.CREAM && creamDilution.getRight() == Cream.CREAM) {
                 builder.append("cremello");
-            } else if (creamDilution.has(HorseGenetics.Cream.CREAM)) {
-                builder.append("palomino");
+            } else if (creamDilution.has(Cream.CREAM)) {
+                builder.append("palomino/").append(entity.getPalomino().name().toLowerCase(Locale.ROOT));
             } else {
-                builder.append("chestnut");
+                builder.append("chestnut/").append(entity.getChestnut().name().toLowerCase(Locale.ROOT));
             }
         }
 
         return builder.toString();
     }
 
-    @SuppressWarnings("unused")
+    //TODO not done
     private Set<ResourceLocation> generateMarkings(SHEntityHorse entity) {
-        return new HashSet<>(); //TODO
+        final Set<ResourceLocation> result = new HashSet<>();
+        final GenotypeHandler genotypeHandler = entity.getGenotypeHandler();
+        if (genotypeHandler.get(FRAME_OVERO).getDominant() == FrameOvero.FRAME_OVERO) {
+            if (genotypeHandler.get(TOBIANO).getDominant() == Tobiano.TOBIANO) {
+                result.add(getMarking(entity, "tovero/tovero_" + (entity.getTobiano() / 5 + 1)));
+            } else {
+                result.add(getMarking(entity, "frame_overo/frame_overo_" + (entity.getFrameOvero() + 1)));
+            }
+        } else if (genotypeHandler.get(TOBIANO).getDominant() == Tobiano.TOBIANO) {
+            result.add(getMarking(entity, "tobiano/tobiano" + (entity.getTobiano() + 1)));
+        }
+        return result;
+    }
+
+    private ResourceLocation getMarking(SHEntityHorse entity, String marking) {
+        String texture = "textures/entity/" + (entity.isChild() ? "foal/" : "adult/") + entity.getTypeName() + "/markings/" +
+                marking + ".png";
+        return new ResourceLocation(SimplyHorses.MOD_ID, texture);
     }
 }

@@ -1,4 +1,4 @@
-package net.msrandom.simplyhorses.entity;
+package net.msrandom.simplyhorses.entity.genetics;
 
 import net.msrandom.genetics.Allele;
 
@@ -36,8 +36,8 @@ public class HorseGenetics {
     }
 
     public enum Dun implements Allele {
-        DILUTE("D"),
-        DARK("ND1"),
+        DUN("D"),
+        PRIMITIVE("ND1"),
         NONE("ND2");
 
         private final String allele;

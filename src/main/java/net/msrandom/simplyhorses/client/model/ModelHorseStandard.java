@@ -8,7 +8,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelHorseStandard extends StandardHorseBase implements SHModelHorse {
-    public ModelRenderer player;
     private final ModelBase foal = new Foal();
 
     public ModelHorseStandard() {
@@ -48,9 +47,6 @@ public class ModelHorseStandard extends StandardHorseBase implements SHModelHors
         this.tail.setRotationPoint(0.0F, 0.0F, 2.8F);
         this.tail.addBox(-1.5F, -2.0F, 0.0F, 2, 20, 5, 0.0F);
         this.setRotateAngle(tail, 0.05235987755982988F, 0.0F, 0.0F);
-        this.player = new ModelRenderer(this, 0, 0);
-        this.player.setRotationPoint(-24.0F, 8.0F, -9.0F);
-        this.player.addBox(0.0F, -16.0F, 1.0F, 16, 32, 16, 0.0F);
         this.tailTop = new ModelRenderer(this, 190, 80);
         this.tailTop.setRotationPoint(5.0F, 1.8F, 25.5F);
         this.tailTop.addBox(-1.0F, -2.0F, 0.0F, 1, 4, 5, 0.0F);
@@ -93,7 +89,6 @@ public class ModelHorseStandard extends StandardHorseBase implements SHModelHors
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.body.render(f5);
-        this.player.render(f5);
     }
 
     @Override
