@@ -49,13 +49,12 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
 
     protected ResourceLocation getEntityTexture(SHEntityHorse entity) {
         //Generate a unique hash value for the horse's genetics and type
-        int hash = 1 << entity.getVariant() + 8;
+        int hash = 1 << entity.getVariant() + 11;
         if (entity.isChild()) {
-            hash |= 0x1; // First bit is for foal vs adult
+            hash |= 0x1;
         }
-        hash |= entity.getBay().ordinal() << 1; // We use the 2 bits after to make sure all bay values are unique
-        hash |= entity.getPalomino().ordinal() << 3; // Same thing for the 2 bits after with palomino
-        hash |= entity.getChestnut().ordinal() << 5; // And 3 extra bits for chestnut
+        hash |= entity.getChestnut().ordinal() << 1;
+        hash |= entity.getDataManager().get(VARIANTS) << 4;
         for (DataParameter<Integer> genetic : SHEntityHorse.GENETICS) {
             hash = 31 * hash + entity.getDataManager().get(genetic);
         }
@@ -109,13 +108,14 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
     private Set<ResourceLocation> generateMarkings(SHEntityHorse entity) {
         final Set<ResourceLocation> result = new HashSet<>();
         final GenotypeHandler genotypeHandler = entity.getGenotypeHandler();
+        boolean tobiano = genotypeHandler.get(TOBIANO).getDominant() == Tobiano.TOBIANO;
         if (genotypeHandler.get(FRAME_OVERO).getDominant() == FrameOvero.FRAME_OVERO) {
-            if (genotypeHandler.get(TOBIANO).getDominant() == Tobiano.TOBIANO) {
+            if (tobiano) {
                 result.add(getMarking(entity, "tovero/tovero_" + (entity.getTobiano() / 5 + 1)));
             } else {
                 result.add(getMarking(entity, "frame_overo/frame_overo_" + (entity.getFrameOvero() + 1)));
             }
-        } else if (genotypeHandler.get(TOBIANO).getDominant() == Tobiano.TOBIANO) {
+        } else if (tobiano) {
             result.add(getMarking(entity, "tobiano/tobiano" + (entity.getTobiano() + 1)));
         }
         return result;

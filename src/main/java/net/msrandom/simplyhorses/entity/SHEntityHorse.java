@@ -26,8 +26,8 @@ import java.util.List;
 
 public class SHEntityHorse extends AbstractHorse {
     public static final List<DataParameter<Integer>> GENETICS = new ArrayList<>();
+    public static final DataParameter<Integer> VARIANTS = EntityDataManager.createKey(SHEntityHorse.class, DataSerializers.VARINT);
     private static final DataParameter<Byte> SHADE = EntityDataManager.createKey(SHEntityHorse.class, DataSerializers.BYTE);
-    private static final DataParameter<Integer> VARIANTS = EntityDataManager.createKey(SHEntityHorse.class, DataSerializers.VARINT);
 
     //These are here since we want GENETICS to be populated before the entity is created.
     private static final GeneticsRegistry REGISTRY = new GeneticsRegistry(GENETICS::size, () -> GENETICS.add(EntityDataManager.createKey(SHEntityHorse.class, DataSerializers.VARINT)));
@@ -58,8 +58,8 @@ public class SHEntityHorse extends AbstractHorse {
         for (DataParameter<Integer> genetic : GENETICS) {
             dataManager.register(genetic, 0);
         }
-        dataManager.register(SHADE, (byte) 0);
         dataManager.register(VARIANTS, 0);
+        dataManager.register(SHADE, (byte) 0);
     }
 
     @Override
@@ -109,8 +109,8 @@ public class SHEntityHorse extends AbstractHorse {
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
         compound.setIntArray("Genetics", GENETICS.stream().mapToInt(genetic -> dataManager.get(genetic)).toArray());
-        compound.setByte("Shade", dataManager.get(SHADE));
         compound.setInteger("Variants", dataManager.get(VARIANTS));
+        compound.setByte("Shade", dataManager.get(SHADE));
     }
 
     @Override
@@ -120,8 +120,8 @@ public class SHEntityHorse extends AbstractHorse {
         for (int i = 0; i < Math.min(genetics.length, GENETICS.size()); ++i) {
             dataManager.set(GENETICS.get(i), genetics[i]);
         }
-        dataManager.set(SHADE, compound.getByte("Shade"));
         dataManager.set(VARIANTS, compound.getInteger("Variants"));
+        dataManager.set(SHADE, compound.getByte("Shade"));
     }
 
     public int getVariant() {
