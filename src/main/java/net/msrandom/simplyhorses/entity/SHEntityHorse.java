@@ -63,49 +63,6 @@ public class SHEntityHorse extends AbstractHorse {
     }
 
     @Override
-    public boolean processInteract(EntityPlayer player, EnumHand hand) {
-        if (!world.isRemote) {
-            final Item item = player.getHeldItem(hand).getItem();
-            if (item == Items.IRON_SHOVEL) {
-                cycleGene(EXTENSION, hand);
-            } else if (item == Items.IRON_PICKAXE) {
-                cycleGene(AGOUTI, hand);
-            } else if (item == Items.IRON_SWORD) {
-                cycleGene(GRAY, hand);
-            } else if (item == Items.IRON_AXE) {
-                cycleGene(CREAM, hand);
-            }
-        }
-        return super.processInteract(player, hand);
-    }
-
-    private <T extends Enum<T> & Allele> void cycleGene(Gene<T> gene, EnumHand hand) {
-        try {
-            final Method method = gene.getClass().getDeclaredMethod("getValues");
-            method.setAccessible(true);
-            final T[] values = (T[]) method.invoke(gene);
-            final Locus<T> tLocus = genotypeHandler.get(gene);
-            if (hand == EnumHand.MAIN_HAND) {
-                final int ordinal = tLocus.getRight().ordinal();
-                if (ordinal == values.length - 1) {
-                    genotypeHandler.set(gene, tLocus.getLeft(), values[0]);
-                } else {
-                    genotypeHandler.set(gene, tLocus.getLeft(), values[ordinal + 1]);
-                }
-            } else {
-                final int ordinal = tLocus.getLeft().ordinal();
-                if (ordinal == values.length - 1) {
-                    genotypeHandler.set(gene, values[0], tLocus.getRight());
-                } else {
-                    genotypeHandler.set(gene, values[ordinal + 1], tLocus.getRight());
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
         compound.setIntArray("Genetics", GENETICS.stream().mapToInt(genetic -> dataManager.get(genetic)).toArray());

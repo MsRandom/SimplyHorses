@@ -65,9 +65,6 @@ public class SHRenderHorse extends RenderLiving<SHEntityHorse> {
             texture = new ResourceLocation(SimplyHorses.MOD_ID, "textures/entity/generated/horse_" + hash + ".png");
             Minecraft.getMinecraft().getTextureManager().loadTexture(texture, new SHMarkingTexture(new ResourceLocation(SimplyHorses.MOD_ID, "textures/entity/" + getBaseTexture(entity) + ".png"), generateMarkings(entity)));
             CACHE.put(hash, texture);
-        } else {
-            Minecraft.getMinecraft().getTextureManager().deleteTexture(texture);
-            Minecraft.getMinecraft().getTextureManager().loadTexture(texture, new SHMarkingTexture(new ResourceLocation(SimplyHorses.MOD_ID, "textures/entity/" + getBaseTexture(entity) + ".png"), generateMarkings(entity)));
         }
         return texture;
     }
