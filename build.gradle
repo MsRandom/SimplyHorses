@@ -20,7 +20,7 @@ archivesBaseName = "SimplyHorses"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
 
-def intGeneticsVersions = "1.0.7-8"
+def intGeneticsVersions = "1.0.8-10"
 
 minecraft {
     version = "1.12.2-14.23.5.2847"
@@ -31,7 +31,7 @@ minecraft {
 repositories {
     maven {
         name = "Ashley's repo"
-        url = "https://nexus.msrandom.net/repository/maven-releases"
+        url = "https://maven.msrandom.net/repository/root/"
     }
 }
 
